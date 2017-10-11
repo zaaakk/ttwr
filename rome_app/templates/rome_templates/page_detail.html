@@ -1,6 +1,5 @@
 {% extends "rome_templates/base.html" %}
 {% load static from staticfiles %}
-{% load markdown_deux_tags %}
 
 {% block title %}{{title}}{% endblock %}
 {% block page_title %}The Theater that was Rome{% endblock %}
@@ -349,7 +348,7 @@ function add_low_toggle_handlers(){
     <div class="annotation">
         <h2>{{essay.title}}</h2>
         <div id = "toggle{{essay.slug}}" class = "essaytogglepage"><span class = "underlinewrap" id="togspan{{essay.slug}}"></span></div>
-        <div id = "essaytext{{essay.slug}}" class = "essaytextpage">{{essay.text|markdown}}</div>
+        <div id = "essaytext{{essay.slug}}" class = "essaytextpage">{{essay.safe_render|safe}}</div>
         <a href="{% url 'specific_essay' essay.slug %}" target ="_blank" class = "essaylinkpage" id = "essaylink{{essay.slug}}"><span class = "underlinewrap">Read More<span class = "underlinewrap" id="togspan{{essay.slug}}"></a>
     </div>
     {% endfor %}

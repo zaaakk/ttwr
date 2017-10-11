@@ -1,6 +1,5 @@
 {% extends "rome_templates/base.html"%}
 {% load static from staticfiles %}
-{% load markdown_deux_tags %}
 
 {% block title %}{{title}}{% endblock %}
 {% block page_title %}The Theater that was Rome - People{% endblock %}
@@ -211,7 +210,7 @@
 <button>˅</button>
     <div id="author_info">
         <div id="roles"><i>{{bio.roles}}</i></div>
-        <p>{{bio.bio|markdown}}</p>
+        <p>{{bio.safe_render|safe}}</p>
     </div>
     <div id="related_sources">
 

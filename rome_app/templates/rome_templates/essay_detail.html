@@ -1,6 +1,5 @@
 {% extends "rome_templates/base.html"%}
 {% load static from staticfiles %}
-{% load markdown_deux_tags %}
 
 {% block extra_head%}
 <style type="text/css">
@@ -227,7 +226,7 @@
 <!--https://repository.library.brown.edu/viewers/image/thumbnail/bdr:381100/-->
         {% block essay %}
         <div id="essay">
-        {{essay_text|markdown}}
+        {{essay.safe_render|safe}}
         </div>
         {% endblock %}
 {% endblock %}

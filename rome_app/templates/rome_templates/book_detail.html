@@ -1,6 +1,5 @@
 {% extends "rome_templates/base.html" %}
 {% load static from staticfiles %}
-{% load markdown_deux_tags %}
 
 {% block title %}{{book.title}}{% endblock %}
 
@@ -188,7 +187,7 @@
       <li>Essays:<span class= "dark">
           {% for essay in essays %}         
             <div id = "toggle{{essay.slug}}" class = "essaytoggle"><span class = "underlinewrap" id="togspan{{essay.slug}}">{{essay.title}}</span></div>
-            <div id = "essaytext{{essay.slug}}" class = "text">{{essay.text|markdown}}</div>
+            <div id = "essaytext{{essay.slug}}" class = "text">{{essay.safe_render|safe}}</div>
             <a class = "essaylink" id = "essaylink{{essay.slug}}" href="{% url 'specific_essay' essay.slug %}" target="_blank">Read More</a>
             <div class= "essayhide" id = "essayhide{{essay.slug}}"><span class = "underlinewrap" id="hide{{essay.slug}}">Hide Essay</span></div>
           {% endfor %}

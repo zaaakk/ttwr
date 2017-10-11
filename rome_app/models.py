@@ -9,6 +9,22 @@ import json
 from eulxml.xmlmap import load_xmlobject_from_string
 from bdrxml import mods
 from django.db import IntegrityError
+import markdown2
+import bleach
+
+TTWR_ALLOWED_TAGS = ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'img']
+ALLOWED_TAGS = bleach.sanitizer.ALLOWED_TAGS + TTWR_ALLOWED_TAGS
+ALLOWED_ATTRS = bleach.sanitizer.ALLOWED_ATTRIBUTES.copy()
+ALLOWED_ATTRS['img'] = ['src']
+
+
+def _safely_render_markdown(md_text):
+    cleaned_text = bleach.clean(md_text,
+                                tags=ALLOWED_TAGS,
+                                attributes=ALLOWED_ATTRS)
+    rendered = markdown2.markdown(cleaned_text, extras=['footnotes'])
+    return rendered
+
 
 # Database Models
 class Biography(models.Model):
@@ -66,6 +82,9 @@ class Biography(models.Model):
     def __unicode__(self):
         return u'%s (%s)' % (self.name, self.trp_id)
 
+    def safe_render(self):
+        return _safely_render_markdown(self.bio)
+
 
 class Essay(models.Model):
 
@@ -98,6 +117,10 @@ class Essay(models.Model):
             pidlist = ["pid:\"%s:%s\"" % (app_settings.PID_PREFIX, p) for p in self.pids.split(",")]
             query = "ir_collection_id:621+AND+display:BDR_PUBLIC+AND+(%s)&fl=primary_title,rel_has_pagination_ssim,rel_is_part_of_ssim,creator,pid,genre" % "+OR+".join(pidlist)
             return query
+
+    def safe_render(self):
+        return _safely_render_markdown(self.text)
+
 
 class Genre(models.Model):
     text = models.CharField(max_length=50, unique=True)
